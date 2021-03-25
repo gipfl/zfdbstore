@@ -173,7 +173,7 @@ class ZfDbStore extends BaseStore
         // when you load the element from db before changing it.
         if ($result === false) {
             // TODO: NotFoundException, key infos
-            throw new RuntimeException('Key not found' . $select);
+            throw new RuntimeException('Key not found: ' . $select);
         }
 
         $storable->setProperties((array) $result);
