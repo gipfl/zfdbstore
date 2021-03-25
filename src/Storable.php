@@ -98,6 +98,7 @@ trait Storable
      */
     public static function load(Store $store, $key)
     {
+        return $store->load($key, get_called_class());
         return $store->load(get_called_class(), $key);
     }
 
