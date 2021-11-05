@@ -167,19 +167,45 @@ class ZfDbStore extends BaseStore
             }
         }
 
-        // TODO: fetchAll, fail when no or more than one row
-        $result = $this->db->fetchRow($select);
+        $result = $this->db->fetchAll($select);
         // TODO: properties should be changed in storeProperties
         // when you load the element from db before changing it.
-        if ($result === false) {
-            // TODO: NotFoundException, key infos
-            throw new RuntimeException('Key not found: ' . $select);
+        if (empty($result)) {
+            throw new NotFoundException('Not found: ' . $this->describeKey($storable, $key));
         }
 
-        $storable->setProperties((array) $result);
-        $storable->setStoredProperties((array) $result);
+        if (count($result) > 1) {
+            throw new NotFoundException(sprintf(
+                'One row expected, got %s: %s',
+                count($result),
+                $this->describeKey($storable, $key)
+            ));
+        }
+
+        $storable->setProperties((array) $result[0]);
+        $storable->setStoredProperties((array) $result[0]);
 
         return $storable;
+    }
+
+    protected function describeKey(StorableInterface $storable, $key)
+    {
+
+        assert($storable instanceof DbStorableInterface);
+        $keyColumn = $storable->getKeyProperty();
+        if (is_string($keyColumn)) {
+            return (string) $key;
+        }
+
+        $parts = [];
+        foreach ($keyColumn as $column) {
+            if (array_key_exists($column, $key)) {
+                $parts[$column] = $key[$column];
+            } else {
+                $parts[$column] = '?';
+            }
+        }
+        return implode(', ', $parts);
     }
 
     /**
