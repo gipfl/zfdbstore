@@ -171,11 +171,11 @@ class ZfDbStore extends BaseStore
         // TODO: properties should be changed in storeProperties
         // when you load the element from db before changing it.
         if (empty($result)) {
-            throw new NotFoundException('Not found: ' . $this->describeKey($storable, $key));
+            throw new NotFoundError('Not found: ' . $this->describeKey($storable, $key));
         }
 
         if (count($result) > 1) {
-            throw new NotFoundException(sprintf(
+            throw new NotFoundError(sprintf(
                 'One row expected, got %s: %s',
                 count($result),
                 $this->describeKey($storable, $key)

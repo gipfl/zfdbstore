@@ -4,6 +4,6 @@ namespace gipfl\ZfDbStore;
 
 use Exception;
 
-class NotFoundException extends Exception
+class NotFoundError extends Exception
 {
 }
