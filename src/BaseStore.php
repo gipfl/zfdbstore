@@ -34,7 +34,7 @@ abstract class BaseStore implements Store
             $this->emit('insert', [$storable]);
             $affected = true;
         } else {
-            if ($this->updateStore($storable)) {
+            if ($storable->isModified() && $this->updateStore($storable)) {
                 $this->emit('update', [$storable]);
                 $affected = true;
             }
