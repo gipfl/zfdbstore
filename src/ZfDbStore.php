@@ -182,7 +182,6 @@ class ZfDbStore extends BaseStore
             ));
         }
 
-        $storable->setProperties((array) $result[0]);
         $storable->setStoredProperties((array) $result[0]);
 
         return $storable;
